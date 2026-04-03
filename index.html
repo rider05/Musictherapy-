@@ -16,123 +16,33 @@
       --border: rgba(200,120,40,0.25);
     }
 
-    body {
-      font-family: 'Crimson Pro', serif;
-      background: var(--cream);
-      color: var(--text-dark);
-      margin: 0;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    header {
-      background: linear-gradient(135deg, var(--maroon), var(--saffron));
-      padding: 2.5rem 1rem;
-      text-align: center;
-      color: #FFF0D0;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-    }
-
+    body { font-family: 'Crimson Pro', serif; background: var(--cream); color: var(--text-dark); margin: 0; min-height: 100vh; display: flex; flex-direction: column; }
+    header { background: linear-gradient(135deg, var(--maroon), var(--saffron)); padding: 2.5rem 1rem; text-align: center; color: #FFF0D0; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
     header h1 { font-family: 'Yatra One', cursive; font-size: clamp(2rem, 8vw, 2.8rem); margin: 0; }
     header h1 span { display: block; font-family: 'Noto Sans Tamil', sans-serif; font-size: 0.5em; color: var(--gold); margin-bottom: 5px; }
 
     main { max-width: 600px; margin: -1.5rem auto 3rem; padding: 0 1rem; width: 100%; box-sizing: border-box; }
+    .step-card { background: white; border-radius: 20px; padding: 1.5rem; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 1px solid var(--border); margin-bottom: 1.5rem; }
 
-    .step-card {
-      background: white;
-      border-radius: 20px;
-      padding: 1.5rem;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-      border: 1px solid var(--border);
-      margin-bottom: 1.5rem;
-    }
+    #status-bar { text-align: center; padding: 0.8rem; font-size: 0.95rem; color: var(--maroon); font-weight: 600; min-height: 1.2rem; }
 
-    #status-bar {
-      text-align: center;
-      padding: 0.8rem;
-      font-size: 0.95rem;
-      color: var(--maroon);
-      font-weight: 600;
-      min-height: 1.2rem;
-    }
-
-    .video-wrap {
-      width: 100%;
-      background: #000;
-      border-radius: 15px;
-      overflow: hidden;
-      aspect-ratio: 4/3;
-      margin-bottom: 1rem;
-    }
-
+    .video-wrap { width: 100%; background: #000; border-radius: 15px; overflow: hidden; aspect-ratio: 4/3; margin-bottom: 1rem; }
     video { width: 100%; height: 100%; object-fit: cover; }
 
-    .btn-action {
-      width: 100%;
-      padding: 1.1rem;
-      border: none;
-      border-radius: 12px;
-      font-family: 'Yatra One', cursive;
-      font-size: 1.2rem;
-      cursor: pointer;
-      transition: 0.3s;
-      background: var(--saffron);
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-    }
-
+    .btn-action { width: 100%; padding: 1.1rem; border: none; border-radius: 12px; font-family: 'Yatra One', cursive; font-size: 1.2rem; cursor: pointer; transition: 0.3s; background: var(--saffron); color: white; display: flex; align-items: center; justify-content: center; gap: 10px; }
     .btn-action:hover { filter: brightness(1.1); transform: translateY(-2px); }
-    .btn-secondary { background: #fdf2e9; color: var(--saffron); border: 1px solid var(--saffron); margin-top: 1rem; }
+    
+    .upload-area { position: relative; width: 100%; margin-top: 1rem; }
+    .upload-area input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
 
-    .upload-btn-wrapper {
-      position: relative;
-      overflow: hidden;
-      display: inline-block;
-      width: 100%;
-    }
-
-    .upload-btn-wrapper input[type=file] {
-      font-size: 100px;
-      position: absolute;
-      left: 0;
-      top: 0;
-      opacity: 0;
-      cursor: pointer;
-    }
-
-    /* Result UI */
-    .emotion-result {
-      display: flex;
-      align-items: center;
-      gap: 1.5rem;
-      background: rgba(232, 98, 10, 0.05);
-      border-radius: 15px;
-      padding: 1.2rem;
-      margin-bottom: 1.5rem;
-    }
-
+    .emotion-result { display: flex; align-items: center; gap: 1.5rem; background: rgba(232, 98, 10, 0.05); border-radius: 15px; padding: 1.2rem; margin-bottom: 1.5rem; }
     .emoji-box { font-size: 3.5rem; }
 
-    /* Player UI */
-    .audio-player-box {
-      background: #fcfcfc;
-      border: 1px solid var(--border);
-      border-radius: 15px;
-      padding: 1.5rem;
-      text-align: center;
-    }
-
+    .audio-player-box { background: #fcfcfc; border: 1px solid var(--border); border-radius: 15px; padding: 1.5rem; text-align: center; }
     #song-title { font-family: 'Yatra One', cursive; color: var(--maroon); font-size: 1.3rem; margin-bottom: 5px; }
-    #song-artist { font-size: 0.9rem; color: #666; margin-bottom: 1.5rem; }
-
-    audio { width: 100%; border-radius: 50px; }
+    audio { width: 100%; border-radius: 50px; margin-top: 1rem; }
 
     .hidden { display: none !important; }
-    
     footer { margin-top: auto; padding: 2rem; text-align: center; font-size: 0.8rem; color: var(--gold); }
   </style>
 </head>
@@ -140,21 +50,17 @@
 
   <header>
     <h1><span>உணர்வு இசை</span>Tamil Soul Healing</h1>
-    <p style="margin: 5px 0 0; opacity: 0.9;">Direct Healing via Native Audio API</p>
+    <p style="margin: 5px 0 0; opacity: 0.9;">Fast Native Audio Restoration</p>
   </header>
 
   <main>
-    <div id="status-bar">Initializing AI Models...</div>
+    <div id="status-bar">Initializing AI...</div>
 
     <div class="step-card" id="input-section">
-      <div class="video-wrap">
-        <video id="video" autoplay muted playsinline></video>
-      </div>
-      
-      <button class="btn-action" onclick="captureFromCamera()">📸 Capture My Expression</button>
-      
-      <div class="upload-btn-wrapper">
-        <button class="btn-action btn-secondary">🖼️ Upload a Photo</button>
+      <div class="video-wrap"><video id="video" autoplay muted playsinline></video></div>
+      <button class="btn-action" onclick="captureFromCamera()">📸 Capture My Mood</button>
+      <div class="upload-area">
+        <button class="btn-action" style="background: #fdf2e9; color: var(--saffron); border: 1px solid var(--saffron);">🖼️ Upload Photo</button>
         <input type="file" accept="image/*" onchange="handleFileUpload(event)" />
       </div>
     </div>
@@ -169,30 +75,23 @@
       </div>
 
       <div class="audio-player-box">
-        <div id="song-title">Searching for melody...</div>
-        <div id="song-artist">Mood Restoration</div>
+        <div id="song-title">Initializing Melody...</div>
         <audio id="audio-player" controls autoplay></audio>
       </div>
 
-      <button class="btn-action" style="background:#666; margin-top:1.5rem;" onclick="location.reload()">↺ Detect Again</button>
+      <button class="btn-action" style="background:#666; margin-top:1.5rem;" onclick="location.reload()">↺ Restart Session</button>
     </div>
-
     <canvas id="proc-canvas" class="hidden"></canvas>
   </main>
 
-  <footer>
-    Your privacy is protected. Face analysis runs entirely in your browser memory.
-  </footer>
-
   <script>
-    // HEALING QUERIES: Used to fetch native audio streams
     const MOOD_CURE = {
-      happy: { emoji: '😄', q: 'Tamil upbeat happy hits', msg: 'Elevate your spirit with these joyful rhythms!' },
-      sad: { emoji: '🌿', q: 'Tamil melody healing soul', msg: 'Rest your heart in this gentle, comforting melody.' },
-      angry: { emoji: '🌊', q: 'Tamil peaceful flute relax', msg: 'Exhale the fire. Let the water-like rhythm calm you.' },
-      fearful: { emoji: '🛡️', q: 'Tamil devotional peaceful power', msg: 'Find your center and strength in this sacred sound.' },
-      neutral: { emoji: '🧘', q: 'Tamil soft unplugged melody', msg: 'A balanced mind deserves a balanced harmony.' },
-      surprised: { emoji: '✨', q: 'Tamil exciting rhythmic joy', msg: 'Match your wonder with this electrifying beat!' }
+      happy: { emoji: '😄', q: 'Tamil happy', backup: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3' },
+      sad: { emoji: '🌿', q: 'Tamil soothing melody', backup: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3' },
+      angry: { emoji: '🌊', q: 'Tamil flute peaceful', backup: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3' },
+      fearful: { emoji: '🛡️', q: 'Tamil devotional', backup: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3' },
+      neutral: { emoji: '🧘', q: 'Tamil soft melody', backup: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3' },
+      surprised: { emoji: '✨', q: 'Tamil joy', backup: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3' }
     };
 
     const MODEL_URL = 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1.7.14/model';
@@ -202,27 +101,16 @@
       try {
         await faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL);
         await faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL);
-        document.getElementById('status-bar').innerText = "AI Ready! Capture or Upload now.";
-        startCamera();
-      } catch (e) {
-        document.getElementById('status-bar').innerText = "Load Error. Check internet connection.";
-      }
-    }
-
-    async function startCamera() {
-      try {
-        videoStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
+        document.getElementById('status-bar').innerText = "AI Ready.";
+        videoStream = await navigator.mediaDevices.getUserMedia({ video: true });
         document.getElementById('video').srcObject = videoStream;
-      } catch (e) {
-        document.getElementById('status-bar').innerText = "Camera not accessible.";
-      }
+      } catch (e) { document.getElementById('status-bar').innerText = "Camera/Model Error."; }
     }
 
     async function captureFromCamera() {
       const video = document.getElementById('video');
       const canvas = document.getElementById('proc-canvas');
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
+      canvas.width = video.videoWidth; canvas.height = video.videoHeight;
       canvas.getContext('2d').drawImage(video, 0, 0);
       runAnalysis(canvas);
     }
@@ -239,59 +127,55 @@
       reader.readAsDataURL(file);
     }
 
-    async function runAnalysis(imgSource) {
-      document.getElementById('status-bar').innerText = "Reading your soul...";
-      const detections = await faceapi.detectAllFaces(imgSource, new faceapi.TinyFaceDetectorOptions()).withFaceExpressions();
-      
-      if (!detections.length) {
-        alert("Could not find a face! Please try again with better lighting.");
-        document.getElementById('status-bar').innerText = "Ready.";
-        return;
-      }
-
-      const expressions = detections[0].expressions;
-      const dominant = Object.entries(expressions).sort((a,b) => b[1] - a[1])[0][0];
-      
-      showResultUI(dominant);
+    async function runAnalysis(source) {
+      document.getElementById('status-bar').innerText = "Analyzing Soul...";
+      const detections = await faceapi.detectAllFaces(source, new faceapi.TinyFaceDetectorOptions()).withFaceExpressions();
+      if (!detections.length) { alert("Face not found."); return; }
+      const dominant = Object.entries(detections[0].expressions).sort((a,b) => b[1] - a[1])[0][0];
+      showResults(dominant);
     }
 
-    async function showResultUI(emo) {
+    function showResults(emo) {
       const data = MOOD_CURE[emo] || MOOD_CURE.neutral;
-      
       document.getElementById('input-section').classList.add('hidden');
       document.getElementById('result-section').classList.remove('hidden');
-      
       document.getElementById('res-emoji').innerText = data.emoji;
       document.getElementById('res-name').innerText = emo;
-      document.getElementById('res-msg').innerText = data.msg;
       
-      if (videoStream) videoStream.getTracks().forEach(t => t.stop());
-      fetchHealingAudio(data.q);
+      if(videoStream) videoStream.getTracks().forEach(t => t.stop());
+      fetchAudio(data);
     }
 
-    async function fetchHealingAudio(query) {
-      const status = document.getElementById('status-bar');
-      status.innerText = "Curating your healing melody...";
-      
+    async function fetchAudio(moodData) {
+      const title = document.getElementById('song-title');
+      const player = document.getElementById('audio-player');
+      title.innerText = "Searching for melody...";
+
+      // Setting a 5-second timeout for the API
+      const timeout = setTimeout(() => {
+        if(player.src === "" || player.paused) {
+          title.innerText = "Restoration Melody (Backup)";
+          player.src = moodData.backup;
+          player.play().catch(()=>alert("Please click play manually."));
+        }
+      }, 5000);
+
       try {
-        const response = await fetch(`https://saavn.dev/api/search/songs?query=${encodeURIComponent(query)}&limit=5`);
-        const result = await response.json();
-        const song = result.data.results[0];
+        const resp = await fetch(`https://saavn.dev/api/search/songs?query=${encodeURIComponent(moodData.q + " tamil")}&limit=1`);
+        const json = await resp.json();
+        const song = json.data.results[0];
         
         if (song) {
-          document.getElementById('song-title').innerText = song.name;
-          document.getElementById('song-artist').innerText = song.primaryArtists;
-          
-          // Get high-quality stream
-          const audio = document.getElementById('audio-player');
-          const streamUrl = song.downloadUrl.find(d => d.quality === '320kbps')?.url || song.downloadUrl[song.downloadUrl.length - 1].url;
-          
-          audio.src = streamUrl;
-          audio.play();
-          status.innerText = "Enjoy your healing session.";
-        }
-      } catch (err) {
-        status.innerText = "API Error. Try again later.";
+          clearTimeout(timeout);
+          title.innerText = song.name;
+          player.src = song.downloadUrl[song.downloadUrl.length - 1].url;
+          player.play();
+        } else { throw new Error(); }
+      } catch (e) {
+        clearTimeout(timeout);
+        title.innerText = "Healing Frequency (Offline Mode)";
+        player.src = moodData.backup;
+        player.play();
       }
     }
 
