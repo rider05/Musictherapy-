@@ -31,7 +31,7 @@
 
     .btn-action { width: 100%; padding: 1.1rem; border: none; border-radius: 12px; font-family: 'Yatra One', cursive; font-size: 1.2rem; cursor: pointer; transition: 0.3s; background: var(--saffron); color: white; display: flex; align-items: center; justify-content: center; gap: 10px; }
     .btn-action:hover { filter: brightness(1.1); transform: translateY(-2px); }
-    
+
     .upload-area { position: relative; width: 100%; margin-top: 1rem; }
     .upload-area input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
 
@@ -40,7 +40,16 @@
 
     .audio-player-box { background: #fcfcfc; border: 1px solid var(--border); border-radius: 15px; padding: 1.5rem; text-align: center; }
     #song-title { font-family: 'Yatra One', cursive; color: var(--maroon); font-size: 1.3rem; margin-bottom: 5px; }
+    #song-filename { font-size: 0.8rem; color: #999; margin-bottom: 0.5rem; font-style: italic; }
     audio { width: 100%; border-radius: 50px; margin-top: 1rem; }
+
+    /* File guide table */
+    .file-guide { margin-top: 1.5rem; border-top: 1px solid var(--border); padding-top: 1rem; }
+    .file-guide h4 { margin: 0 0 0.8rem; color: var(--gold); font-size: 0.9rem; text-align: center; }
+    .file-guide table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    .file-guide td { padding: 5px 8px; border-bottom: 1px solid #f0e8d8; }
+    .file-guide td:first-child { font-weight: 600; color: var(--saffron); width: 35%; }
+    .file-guide td:last-child { color: #666; font-family: monospace; }
 
     .hidden { display: none !important; }
     footer { margin-top: auto; padding: 2rem; text-align: center; font-size: 0.8rem; color: var(--gold); }
@@ -50,71 +59,104 @@
 
   <header>
     <h1><span>உணர்வு இசை</span>Tamil Soul Healing</h1>
-    <p style="margin: 5px 0 0; opacity: 0.9;">Fast Native Audio Restoration</p>
+    <p style="margin: 5px 0 0; opacity: 0.9;">Local Music · Emotion Detection</p>
   </header>
 
   <main>
     <div id="status-bar">Initializing AI...</div>
 
+    <!-- Step 1: Camera / Upload -->
     <div class="step-card" id="input-section">
       <div class="video-wrap"><video id="video" autoplay muted playsinline></video></div>
       <button class="btn-action" onclick="captureFromCamera()">📸 Capture My Mood</button>
-      <div class="upload-area">
-        <button class="btn-action" style="background: #fdf2e9; color: var(--saffron); border: 1px solid var(--saffron);">🖼️ Upload Photo</button>
+      <div class="upload-area" style="margin-top:1rem;">
+        <button class="btn-action" style="background:#fdf2e9; color:var(--saffron); border:1px solid var(--saffron);">🖼️ Upload Photo</button>
         <input type="file" accept="image/*" onchange="handleFileUpload(event)" />
+      </div>
+
+      <!-- File naming guide shown inside the card -->
+      <div class="file-guide">
+        <h4>📂 Place your audio files in the same folder as this HTML file</h4>
+        <table>
+          <tr><td>😄 Happy</td>    <td>happy.mp3</td></tr>
+          <tr><td>🌿 Sad</td>      <td>sad.mp3</td></tr>
+          <tr><td>😠 Angry</td>    <td>angry.mp3</td></tr>
+          <tr><td>😨 Fearful</td>  <td>fearful.mp3</td></tr>
+          <tr><td>😐 Neutral</td>  <td>neutral.mp3</td></tr>
+          <tr><td>😲 Surprised</td><td>surprised.mp3</td></tr>
+          <tr><td>🤢 Disgusted</td><td>disgusted.mp3</td></tr>
+        </table>
       </div>
     </div>
 
+    <!-- Step 2: Result -->
     <div id="result-section" class="step-card hidden">
       <div class="emotion-result">
         <div class="emoji-box" id="res-emoji">😊</div>
         <div>
-          <h2 id="res-name" style="margin: 0; color: var(--saffron); text-transform: capitalize;">Mood Detected</h2>
-          <p id="res-msg" style="margin: 5px 0 0; font-size: 0.95rem; line-height: 1.4; color: #555;"></p>
+          <h2 id="res-name" style="margin:0; color:var(--saffron); text-transform:capitalize;">Mood Detected</h2>
+          <p id="res-msg" style="margin:5px 0 0; font-size:0.95rem; line-height:1.4; color:#555;"></p>
         </div>
       </div>
 
       <div class="audio-player-box">
-        <div id="song-title">Initializing Melody...</div>
+        <div id="song-title">Loading melody...</div>
+        <div id="song-filename"></div>
         <audio id="audio-player" controls autoplay></audio>
+        <p id="audio-error" style="color:#c0392b; font-size:0.85rem; display:none; margin-top:0.5rem;"></p>
       </div>
 
       <button class="btn-action" style="background:#666; margin-top:1.5rem;" onclick="location.reload()">↺ Restart Session</button>
     </div>
+
     <canvas id="proc-canvas" class="hidden"></canvas>
   </main>
 
+  <footer>உணர்வு இசை &mdash; Tamil Soul Healing &copy; 2025</footer>
+
   <script>
-    const MOOD_CURE = {
-      happy: { emoji: '😄', q: 'Tamil happy', backup: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3' },
-      sad: { emoji: '🌿', q: 'Tamil soothing melody', backup: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3' },
-      angry: { emoji: '🌊', q: 'Tamil flute peaceful', backup: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3' },
-      fearful: { emoji: '🛡️', q: 'Tamil devotional', backup: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3' },
-      neutral: { emoji: '🧘', q: 'Tamil soft melody', backup: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3' },
-      surprised: { emoji: '✨', q: 'Tamil joy', backup: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3' }
+    // ─── Emotion config ───────────────────────────────────────────────────────
+    // Each key maps to a local file (same directory) + display info.
+    // Supported formats: .mp3  .ogg  .wav  .m4a  .aac  .flac
+    // File must live in the SAME folder as this index.html
+    const MOOD_DATA = {
+      happy:     { emoji: '😄', label: 'Happy',     file: 'happy.mp3',     msg: 'Your joy is beautiful — here is a song to celebrate it!' },
+      sad:       { emoji: '🌿', label: 'Sad',       file: 'sad.mp3',       msg: 'A gentle melody to soothe your heart.' },
+      angry:     { emoji: '🌊', label: 'Angry',     file: 'angry.mp3',     msg: 'Let this peaceful tune calm the storm within.' },
+      fearful:   { emoji: '🛡️', label: 'Fearful',  file: 'fearful.mp3',   msg: 'You are safe. Let this devotional song embrace you.' },
+      neutral:   { emoji: '🧘', label: 'Neutral',   file: 'neutral.mp3',   msg: 'A soft melody to keep you centred.' },
+      surprised: { emoji: '✨', label: 'Surprised', file: 'surprised.mp3', msg: 'Ride the wave of wonder with this joyful tune.' },
+      disgusted: { emoji: '🤢', label: 'Disgusted', file: 'disgusted.mp3', msg: 'Let this serene melody cleanse your mind.' },
     };
 
     const MODEL_URL = 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1.7.14/model';
     let videoStream = null;
 
+    // ─── Init ─────────────────────────────────────────────────────────────────
     async function init() {
       try {
+        setStatus('Loading AI models...');
         await faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL);
         await faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL);
-        document.getElementById('status-bar').innerText = "AI Ready.";
+        setStatus('AI Ready. Capture or upload a photo.');
         videoStream = await navigator.mediaDevices.getUserMedia({ video: true });
         document.getElementById('video').srcObject = videoStream;
-      } catch (e) { document.getElementById('status-bar').innerText = "Camera/Model Error."; }
+      } catch (e) {
+        setStatus('⚠️ Camera or model error: ' + e.message);
+      }
     }
 
+    // ─── Camera capture ───────────────────────────────────────────────────────
     async function captureFromCamera() {
       const video = document.getElementById('video');
       const canvas = document.getElementById('proc-canvas');
-      canvas.width = video.videoWidth; canvas.height = video.videoHeight;
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
       canvas.getContext('2d').drawImage(video, 0, 0);
-      runAnalysis(canvas);
+      await runAnalysis(canvas);
     }
 
+    // ─── File upload ──────────────────────────────────────────────────────────
     function handleFileUpload(event) {
       const file = event.target.files[0];
       if (!file) return;
@@ -127,56 +169,74 @@
       reader.readAsDataURL(file);
     }
 
+    // ─── Emotion detection ────────────────────────────────────────────────────
     async function runAnalysis(source) {
-      document.getElementById('status-bar').innerText = "Analyzing Soul...";
-      const detections = await faceapi.detectAllFaces(source, new faceapi.TinyFaceDetectorOptions()).withFaceExpressions();
-      if (!detections.length) { alert("Face not found."); return; }
-      const dominant = Object.entries(detections[0].expressions).sort((a,b) => b[1] - a[1])[0][0];
+      setStatus('Analyzing your expression...');
+      const detections = await faceapi
+        .detectAllFaces(source, new faceapi.TinyFaceDetectorOptions())
+        .withFaceExpressions();
+
+      if (!detections.length) {
+        setStatus('⚠️ No face detected. Please try again.');
+        return;
+      }
+
+      const dominant = Object.entries(detections[0].expressions)
+        .sort((a, b) => b[1] - a[1])[0][0];
+
       showResults(dominant);
     }
 
-    function showResults(emo) {
-      const data = MOOD_CURE[emo] || MOOD_CURE.neutral;
+    // ─── Show results + play local file ──────────────────────────────────────
+    function showResults(emotion) {
+      const data = MOOD_DATA[emotion] || MOOD_DATA.neutral;
+
+      // Stop camera
+      if (videoStream) videoStream.getTracks().forEach(t => t.stop());
+
+      // Switch cards
       document.getElementById('input-section').classList.add('hidden');
       document.getElementById('result-section').classList.remove('hidden');
+
+      // Populate emotion details
       document.getElementById('res-emoji').innerText = data.emoji;
-      document.getElementById('res-name').innerText = emo;
-      
-      if(videoStream) videoStream.getTracks().forEach(t => t.stop());
-      fetchAudio(data);
+      document.getElementById('res-name').innerText = data.label;
+      document.getElementById('res-msg').innerText = data.msg;
+      document.getElementById('song-title').innerText = data.label + ' — Tamil Melody';
+      document.getElementById('song-filename').innerText = '📁 ' + data.file;
+
+      // Play the local audio file
+      playLocalAudio(data.file, emotion);
+      setStatus('');
     }
 
-    async function fetchAudio(moodData) {
-      const title = document.getElementById('song-title');
-      const player = document.getElementById('audio-player');
-      title.innerText = "Searching for melody...";
+    function playLocalAudio(filename, emotion) {
+      const player  = document.getElementById('audio-player');
+      const errBox  = document.getElementById('audio-error');
 
-      // Setting a 5-second timeout for the API
-      const timeout = setTimeout(() => {
-        if(player.src === "" || player.paused) {
-          title.innerText = "Restoration Melody (Backup)";
-          player.src = moodData.backup;
-          player.play().catch(()=>alert("Please click play manually."));
-        }
-      }, 5000);
+      // src is a relative path — just the filename, same directory as index.html
+      player.src = filename;
+      errBox.style.display = 'none';
 
-      try {
-        const resp = await fetch(`https://saavn.dev/api/search/songs?query=${encodeURIComponent(moodData.q + " tamil")}&limit=1`);
-        const json = await resp.json();
-        const song = json.data.results[0];
-        
-        if (song) {
-          clearTimeout(timeout);
-          title.innerText = song.name;
-          player.src = song.downloadUrl[song.downloadUrl.length - 1].url;
-          player.play();
-        } else { throw new Error(); }
-      } catch (e) {
-        clearTimeout(timeout);
-        title.innerText = "Healing Frequency (Offline Mode)";
-        player.src = moodData.backup;
-        player.play();
-      }
+      player.load();
+      player.play().catch(() => {
+        // Autoplay blocked — player controls are visible so user can press play
+        errBox.style.display = 'block';
+        errBox.innerText = '▶ Tap the player above to start. (Autoplay was blocked by browser.)';
+      });
+
+      // If the file doesn't exist / can't load
+      player.onerror = () => {
+        errBox.style.display = 'block';
+        errBox.innerText =
+          `⚠️ Could not load "${filename}". Make sure the file exists in the same folder as this HTML file.`;
+        document.getElementById('song-title').innerText = 'File not found';
+      };
+    }
+
+    // ─── Helper ───────────────────────────────────────────────────────────────
+    function setStatus(msg) {
+      document.getElementById('status-bar').innerText = msg;
     }
 
     init();
